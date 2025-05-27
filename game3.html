@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Moments in Pieces</title>
+<style>
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #a2d4f7, #fbc2eb);
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+  }
+  #backBtn {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: #444;
+    padding: 6px 12px;
+    font-size: 1rem;
+    font-weight: 600;
+    user-select: none;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    z-index: 1000;
+    text-decoration: none;
+  }
+  #backBtn:hover {s
+    color: #hotpink
+  }
+  #backBtn svg {
+    width: 18px;
+    height: 18px;
+    stroke: currentColor;
+    stroke-width: 3;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    fill: none;
+  }
+  h1 {
+    text-align: center;
+    color: #333;
+    margin-top: 80px;
+    margin-bottom: 10px;
+  }
+.controls-top {
+  max-width: 360px;
+  margin: 20px auto;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  padding: 0 10px;
+}
+
+  select#difficulty {
+    padding: 6px 10px;
+    font-size: 1rem;
+    border-radius: 5px;
+    border: 2px solid #ff8888;
+    outline: none;
+  }
+  .image-choices {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 60px;
+    margin-bottom: 20px;
+    padding: 0 10px;
+  }
+  .image-choices img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: transform 0.2s, border-color 0.2s;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  }
+  .image-choices img:hover {
+    transform: scale(1.1);
+  }
+  .image-choices img.selected {
+    border-color: #ff8888;
+  }
+  #puzzle {
+    margin: 0 auto;
+    display: grid;
+    gap: 1px;
+    border: 4px solid #ff8888;
+    background: #ff8888;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  }
+  .tile {
+    cursor: pointer;
+    border: 1px solid #fafafa;
+    border-radius: 4px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    user-select: none;
+    will-change: transform;
+    background-size: cover;
+    background-repeat: no-repeat;
+  }
+  .tile:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+  }
+  .empty {
+    background: #f2f2f2;
+    cursor: default;
+    border: none;
+    box-shadow: none;
+  }
+  #controls {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+    padding: 0 10px;
+  }
+  button {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    background: #ff8888;
+    color: white;
+    transition: background 0.3s, transform 0.2s;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  }
+  button:hover {
+    background: #ff6a6a;
+    transform: translateY(-2px);
+  }
+  #stats {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    font-size: 14px;
+    color: #333;
+    background: rgba(255, 255, 255, 0.8);
+    padding: 8px 14px;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    z-index: 1000;
+    user-select: none;
+    white-space: nowrap;
+  }
+  #message {
+    margin-top: 15px;
+    font-weight: bold;
+    color: #d32f2f;
+    min-height: 1.2em;
+    text-align: center;
+    padding: 0 10px;
+  }
+
+  /* Responsive */
+  @media (max-width: 400px) {
+    .tile {
+      font-size: 0.9rem;
+    }
+    .image-choices img {
+      width: 70px;
+      height: 70px;
+    }
+    button {
+      font-size: 14px;
+      padding: 8px 16px;
+    }
+    #puzzle {
+      width: 280px !important;
+      height: 280px !important;
+    }
+  }
+
+  /* Confetti container */
+  #confetti-canvas {
+    position: fixed;
+    pointer-events: none;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 2000;
+  }
+
+ #loading-screen {
+  display: none; /* hidden by default */
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  width: 100vw;
+  background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 99%, #fad0c4 100%);
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+}
+
+
+#loading-bar-container {
+  width: 300px;
+  height: 25px;
+  border: 2px solid #f08080;
+  border-radius: 12px;
+  margin-bottom: 15px;
+  overflow: hidden;
+}
+
+#loading-bar {
+  height: 100%;
+  width: 0%;
+  background-color: #f08080;
+  transition: width 0.1s ease;
+  border-radius: 12px 0 0 12px;
+}
+
+#loading-text {
+  font-family: 'Arial', sans-serif;
+  font-size: 20px;
+  color: #f08080;
+  font-weight: bold;
+}
+@keyframes fadeInBounce {
+  0% {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+#loading-heading {
+  font-family: 'Arial', sans-serif;
+  font-size: 36px;
+  color: #f08080;
+  margin-bottom: 20px;
+  text-align: center;
+  user-select: none;
+  animation: fadeInBounce 1.5s ease forwards;
+}
+@keyframes wave {
+  0% { transform: rotate(0deg); }
+  10% { transform: rotate(14deg); }
+  20% { transform: rotate(-8deg); }
+  30% { transform: rotate(14deg); }
+  40% { transform: rotate(-4deg); }
+  50% { transform: rotate(10deg); }
+  60% { transform: rotate(0deg); }
+  100% { transform: rotate(0deg); }
+}
+#heading {
+  font-family: 'Arial', sans-serif;
+  font-size: 36px;
+  color: dimgray; 
+  margin-bottom: 10px; /* fixed typo */
+  text-align: center;
+  user-select: none;animation: wave 2s ease-in-out infinite;
+}
+
+
+</style>
+</head>
+<body>
+
+<div id="loading-screen">
+  <h1 id="loading-heading">❤️Moments in Pieces❤️</h1>
+  <div id="loading-bar-container">
+    <div id="loading-bar"></div>
+  </div>
+  <div id="loading-text">Loading... ❤️</div>
+</div>
+
+
+<a id="backBtn" href="index.html" title="Back to index">
+  <svg viewBox="0 0 24 24">
+    <polyline points="15 18 9 12 15 6"></polyline>
+  </svg>
+  Back
+</a>
+
+
+ <h1 id="heading">❤️Moments in Pieces❤️</h1>
+<div class="image-choices" title="Select a puzzle image">
+  <img src="images/IMG_20241108_203243_134.jpg" alt="Pic 1" />
+  <img src="images/IMG_20240921_185615_311.webp" alt="Pic 2" />
+  <img src="images/IMG_20250313_134419_121.jpg" alt="Pic 3" />
+  <img src="images/IMG_20250322_183400_092.jpg" alt="Pic 4" />
+  <img src="images/received_1095052821747146.jpeg" alt="Pic 5" />
+</div>
+
+<div id="puzzle"></div>
+
+<div class="controls-top">
+  <select id="difficulty" title="Select difficulty">
+    <option value="3">Easy (3x3)</option>
+    <option value="4">Medium (4x4)</option>
+    <option value="5">Hard (5x5)</option>
+  </select>
+  <button id="shuffleBtn">Shuffle</button>
+  <button id="solveBtn">Solve</button>
+</div>
+
+
+<div id="stats">Time: <span id="timer">00:00</span> | Moves: <span id="moves">0</span></div>
+<div id="message"></div>
+
+<!-- Sounds -->
+<audio id="moveSound" src="https://freesound.org/data/previews/256/256113_3263906-lq.mp3" preload="auto"></audio>
+<audio id="winSound" src="music/SM.mp3"></audio>
+
+<!-- Confetti Canvas -->
+<canvas id="confetti-canvas"></canvas>
+
+<script>
+
+(() => {
+  const puzzle = document.getElementById('puzzle');
+  const shuffleBtn = document.getElementById('shuffleBtn');
+  const solveBtn = document.getElementById('solveBtn');
+  const message = document.getElementById('message');
+  const timerEl = document.getElementById('timer');
+  const movesEl = document.getElementById('moves');
+  const imageChoices = document.querySelectorAll('.image-choices img');
+  const moveSound = document.getElementById('moveSound');
+  const winSound = document.getElementById('winSound');
+  const difficultySelect = document.getElementById('difficulty');
+  const confettiCanvas = document.getElementById('confetti-canvas');
+  const confettiCtx = confettiCanvas.getContext('2d');
+  const loadingScreen = document.getElementById('loading-screen');
+  const loadingBar = document.getElementById('loading-bar');
+
+
+  // State
+  let size = parseInt(difficultySelect.value);
+  let totalTiles = size * size;
+  let tiles = [];
+  let emptyIndex = totalTiles - 1;
+  let currentImage = imageChoices[0].src;
+  let timer = null;
+  let startTime = null;
+  let moves = 0;
+  let confettiActive = false;
+  let confettiParticles = [];
+   let width = 0;
+
+  // Responsive grid sizing
+  function setPuzzleGridSize() {
+    const width = window.innerWidth < 360 ? 280 : 312;
+    puzzle.style.width = width + 'px';
+    puzzle.style.height = width + 'px';
+    puzzle.style.gridTemplateColumns = `repeat(${size}, 1fr)`;
+    puzzle.style.gridTemplateRows = `repeat(${size}, 1fr)`;
+  }
+
+  // Full-screen confetti canvas sizing
+  function resizeConfettiCanvas() {
+    confettiCanvas.width = window.innerWidth;
+    confettiCanvas.height = window.innerHeight;
+  }
+
+  // Initialize tile state
+  function init() {
+    totalTiles = size * size;
+    tiles = [];
+    for (let i = 1; i < totalTiles; i++) tiles.push(i);
+    tiles.push(0);
+    emptyIndex = totalTiles - 1;
+  }
+
+  // Draw tiles
+  function draw() {
+    puzzle.innerHTML = '';
+    const puzzleWidth = puzzle.clientWidth;
+    tiles.forEach((num, index) => {
+      const tile = document.createElement('div');
+      tile.classList.add('tile');
+      if (num === 0) {
+        tile.classList.add('empty');
+      } else {
+        const tileWidth = puzzleWidth / size;
+        const x = ((num - 1) % size) * tileWidth;
+        const y = Math.floor((num - 1) / size) * tileWidth;
+        tile.style.backgroundImage = `url(${currentImage})`;
+        tile.style.backgroundPosition = `-${x}px -${y}px`;
+        tile.style.backgroundSize = `${puzzleWidth}px ${puzzleWidth}px`;
+        tile.addEventListener('click', () => moveTile(index));
+      }
+      puzzle.appendChild(tile);
+    });
+  }
+
+  // Can move?
+  function canMove(index) {
+    const r1 = Math.floor(emptyIndex / size), c1 = emptyIndex % size;
+    const r2 = Math.floor(index / size),    c2 = index % size;
+    return (r1 === r2 && Math.abs(c1 - c2) === 1) ||
+           (c1 === c2 && Math.abs(r1 - r2) === 1);
+  }
+
+  // Move tile
+  function moveTile(index) {
+    if (!timer) startTimer(); // start timing on first move
+    if (canMove(index)) {
+      [tiles[emptyIndex], tiles[index]] = [tiles[index], tiles[emptyIndex]];
+      emptyIndex = index;
+      moves++;
+      movesEl.textContent = moves;
+      draw();
+      playMoveSound();
+      if (isSolved()) finishGame();
+    }
+  }
+
+  // Shuffle (solvable)
+  function shuffle() {
+    do {
+      for (let i = tiles.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [tiles[i], tiles[j]] = [tiles[j], tiles[i]];
+      }
+      emptyIndex = tiles.indexOf(0);
+    } while (!isSolvable(tiles) || isSolved());
+    draw();
+    resetTimer();
+    message.textContent = '';
+  }
+
+  // Solve instantly
+  function solve() {
+    init();
+    setPuzzleGridSize();
+    draw();
+    resetTimer();
+    message.textContent = '';
+    stopTimer();
+    finishGame(); 
+  }
+
+  // Check solved
+  function isSolved() {
+    for (let i = 0; i < totalTiles - 1; i++) {
+      if (tiles[i] !== i + 1) return false;
+    }
+    return tiles[totalTiles - 1] === 0;
+  }
+
+  // Check solvability
+  function isSolvable(arr) {
+    let invCount = 0;
+    for (let i = 0; i < arr.length - 1; i++) {
+      for (let j = i + 1; j < arr.length; j++) {
+        if (arr[i] && arr[j] && arr[i] > arr[j]) invCount++;
+      }
+    }
+    if (size % 2 === 1) {
+      return invCount % 2 === 0;
+    } else {
+      const rowFromBottom = size - Math.floor(emptyIndex / size);
+      return (rowFromBottom % 2 === 0) ? invCount % 2 === 1 : invCount % 2 === 0;
+    }
+  }
+
+  // Timer controls
+  function startTimer() {
+    if (timer) clearInterval(timer);
+    startTime = Date.now();
+    timerEl.textContent = '00:00';
+    moves = 0;
+    movesEl.textContent = '0';
+    timer = setInterval(() => {
+      const elapsed = Date.now() - startTime;
+      timerEl.textContent = formatTime(elapsed);
+    }, 1000);
+  }
+
+  function stopTimer() {
+    if (timer) {
+      clearInterval(timer);
+      timer = null;
+    }
+  }
+
+  function resetTimer() {
+    stopTimer();
+    timerEl.textContent = '00:00';
+    moves = 0;
+    movesEl.textContent = '0';
+  }
+
+  function formatTime(ms) {
+    const totalSeconds = Math.floor(ms / 1000);
+    const mins = String(Math.floor(totalSeconds / 60)).padStart(2, '0');
+    const secs = String(totalSeconds % 60).padStart(2, '0');
+    return `${mins}:${secs}`;
+  }
+
+  // Sounds
+  function playMoveSound() {
+    moveSound.currentTime = 0;
+    moveSound.play();
+  }
+ function playWinSound() {
+  winSound.currentTime = 0;
+  winSound.play().catch(e => console.error("Failed to play win sound:", e));
+}
+
+
+  // Endgame
+  function finishGame() {
+    stopTimer();
+    message.textContent = `Wew! Galing mo naman na solved mo! ${timerEl.textContent} with ${moves} moves! 🎉`;
+    playWinSound();
+    saveScore(size, timerEl.textContent, moves);
+    startConfetti();
+  }
+
+  // Scores
+  function saveScore(sz, time, mv) {
+    const key = `sliding_puzzle_scores_${sz}`;
+    const stored = JSON.parse(localStorage.getItem(key)) || [];
+    stored.push({ time, moves: mv, date: new Date().toISOString() });
+    if (stored.length > 10) stored.shift();
+    localStorage.setItem(key, JSON.stringify(stored));
+  }
+
+  // Confetti
+  const colors = ['#ff5757', '#ffbb3b', '#4ee44e', '#4db8ff', '#db4eff'];
+  function randomRange(min, max) {
+    return Math.random() * (max - min) + min;
+  }
+  class ConfettiParticle {
+    constructor(x, y) {
+      this.x = x; this.y = y;
+      this.w = randomRange(7, 10);
+      this.h = this.w * 0.4;
+      this.color = colors[Math.floor(Math.random() * colors.length)];
+      this.speedX = randomRange(-2, 2);
+      this.speedY = randomRange(-7, -3);
+      this.gravity = 0.3;
+      this.rotation = randomRange(0, 2 * Math.PI);
+      this.rotationSpeed = randomRange(-0.1, 0.1);
+      this.opacity = 1;
+      this.lifetime = 200;
+    }
+    update() {
+      this.speedY += this.gravity;
+      this.x += this.speedX;
+      this.y += this.speedY;
+      this.rotation += this.rotationSpeed;
+      this.lifetime--;
+      this.opacity = Math.max(0, this.lifetime / 200);
+    }
+    draw(ctx) {
+      ctx.save();
+      ctx.translate(this.x, this.y);
+      ctx.rotate(this.rotation);
+      ctx.fillStyle = this.color;
+      ctx.globalAlpha = this.opacity;
+      ctx.fillRect(-this.w / 2, -this.h / 2, this.w, this.h);
+      ctx.restore();
+    }
+  }
+
+  function startConfetti() {
+    resizeConfettiCanvas();
+    confettiActive = true;
+    confettiParticles = [];
+    for (let i = 0; i < 150; i++) {
+      confettiParticles.push(
+        new ConfettiParticle(
+          randomRange(0, window.innerWidth),
+          randomRange(0, window.innerHeight / 2)
+        )
+      );
+    }
+    requestAnimationFrame(confettiLoop);
+    setTimeout(() => (confettiActive = false), 7000);
+  }
+
+  function confettiLoop() {
+    if (!confettiActive) {
+      confettiCtx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+      return;
+    }
+    confettiCtx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+    confettiParticles.forEach((p, i) => {
+      p.update();
+      p.draw(confettiCtx);
+      if (p.lifetime <= 0) {
+        confettiParticles[i] = new ConfettiParticle(
+          randomRange(0, window.innerWidth),
+          randomRange(0, window.innerHeight / 2)
+        );
+      }
+    });
+    requestAnimationFrame(confettiLoop);
+  }
+
+  function startLoadingBar() {
+
+  loadingScreen.style.display = 'flex'; 
+  loadingBar.style.width = '0%';          
+
+  const interval = setInterval(() => {
+    width += 2; 
+    loadingBar.style.width = width + '%';
+
+    if (width >= 100) {
+      clearInterval(interval);
+      loadingScreen.style.display = 'none';
+
+      // Start the game here
+      shuffle();
+      startTimer();
+    }
+  }, 50); // You can adjust timing here
+}
+
+// Tawagin kapag ready na ang page or gusto mong mag-load
+document.addEventListener('DOMContentLoaded', () => {
+  startLoadingBar();
+});
+
+
+  // Event listeners
+  shuffleBtn.addEventListener('click', () => {
+    shuffle();
+    startTimer();
+  });
+
+  solveBtn.addEventListener('click', () => {
+    solve();
+    playWinSound();
+  });
+
+  difficultySelect.addEventListener('change', () => {
+    size = parseInt(difficultySelect.value);
+    init();
+    setPuzzleGridSize();
+    draw();
+    resetTimer();
+    message.textContent = '';
+  });
+
+  imageChoices.forEach(img => {
+    img.addEventListener('click', () => {
+      imageChoices.forEach(i => i.classList.remove('selected'));
+      img.classList.add('selected');
+      currentImage = img.src;
+      draw();
+    });
+  });
+
+  window.addEventListener('resize', () => {
+    setPuzzleGridSize();
+    resizeConfettiCanvas();
+    draw();
+  });
+
+
+  // Initial setup
+  init();
+  setPuzzleGridSize();
+  resizeConfettiCanvas();
+  imageChoices[0].classList.add('selected');
+  draw();
+  shuffle(); // shuffle on load
+  startTimer(); // start timer on load
+})();
+</script>
+
+
+</body>
+</html>

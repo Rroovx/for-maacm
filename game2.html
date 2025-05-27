@@ -1,0 +1,672 @@
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Love Maze - Randomized</title>
+    <style>
+  body {
+  font-family: 'Quicksand', sans-serif;
+  background: #fff0f5;
+  margin: 0;
+  padding: 1rem;
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+  color: #d63384;
+  flex-direction: column;
+}
+
+h1 {
+  margin: 0 0 1rem 0;
+  font-weight: 700;
+  font-size: 1.8rem;
+  text-align: center;
+  color: #d63384;
+}
+
+/* Container with left controls and right maze */
+#container {
+  display: flex;
+  width: 100%;
+  height: 90vh;
+  gap: 2rem;
+  box-sizing: border-box;s
+}
+
+/* Left panel: vertical controls */
+#controls {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  min-width: 180px;
+  max-width: 220px;
+  background: #ffe6f0;
+  padding: 1rem;
+  border-radius: 10px;
+  box-shadow: 0 0 8px rgba(214, 51, 132, 0.4);
+  overflow-y: auto;
+}
+
+#controls h2 {
+  margin: 0 0 0.5rem 0;
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+#char-select, #level-select {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+#char-select div, #level-select button {
+  cursor: pointer;
+  padding: 0.6rem 0.8rem;
+  border: 2px solid transparent;
+  border-radius: 6px;
+  font-size: 1.6rem;
+  background: white;
+  user-select: none;
+  text-align: center;
+  transition: all 0.2s ease;
+}
+
+#char-select div:hover, #level-select button:hover {
+  border-color: #d63384;
+  background: #ffd1dc;
+}
+
+#char-select div.selected, #level-select button.active {
+  border-color: #d63384;
+  background: #ffe6f0;
+  font-weight: 700;
+}
+
+button#reset-btn {
+  cursor: pointer;
+  padding: 0.7rem 1rem;
+  font-size: 1.1rem;
+  border: 2px;
+  background: white;
+  color: black;
+  border-radius: 8px;
+  transition: background 0.3s ease, color 0.3s ease;
+  user-select: none;
+}
+
+button#reset-btn:hover {
+  background: #d63384;
+  color: white;
+}
+
+/* Right panel: maze container */
+#maze-container {
+
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  flex-grow: 1;
+  border: 2px solid #d63384;
+  border-radius: 8px;
+  background: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  overflow: hidden;
+  box-sizing: border-box;
+  max-height: 100%;
+ 
+}
+#maze {
+  display: grid;
+  grid-gap: 4px;
+  
+  /* remove margin or set to 0 to prevent offset */
+  margin: 0;
+
+  /* set fixed or max size to keep maze contained */
+  max-width: 100%;
+  max-height: 100%;
+
+  /* optionally fix width and height to actual maze size */
+  /* for example: */
+  width: max-content;
+  height: max-content;
+}
+
+
+/* Maze cells */
+.cell {
+  width: 25px;
+  height: 25px;
+  text-align: center;
+  line-height: 25px;
+  font-size: 1.4rem;
+  box-sizing: border-box;
+  user-select: none;
+}
+
+.wall {
+  background: #d63384;
+  border-radius: 4px;
+}
+
+.path {
+  background: #fff0f5;
+}
+
+.player {
+  font-weight: bold;
+}
+
+.goal {
+  background: #ffd1dc;
+  border-radius: 4px;
+}
+
+#message {
+  margin-top: 1rem;
+  font-weight: bold;
+  text-align: center;
+  color: #b12a63;
+}
+
+      /* Responsive adjustments */
+      @media (max-width: 700px) {
+        body {
+          flex-direction: column;
+          height: auto;
+        }
+        #container {
+          flex-direction: column;
+        }
+        #controls {
+          flex-direction: row;
+          justify-content: center;
+          max-width: 100%;
+          overflow-x: auto;
+          gap: 1rem;
+          padding: 0.5rem;
+        }
+        #char-select, #level-select {
+          flex-direction: row;
+        }
+        #maze-container {
+          max-height: 400px;
+          margin-top: 1rem;
+          border-radius: 6px;
+        }
+      }
+
+       button#back-btn {
+      cursor: pointer;
+      padding: 0.7rem .1rem;
+      font-size: 1.1rem;
+      border: 2px;
+      background: white;
+      color: black;
+      border-radius: 8px;
+      transition: background 0.3s ease, color 0.3s ease;
+      user-select: none;
+    
+    }
+    button#back-btn:hover {
+      background: #d63384;
+      color: white;
+    }
+
+
+    #loading-screen {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    background: linear-gradient(135deg, #ff9a9e 0%, #fbc7c7 100%);
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: #d63384;
+    font-family: Arial, sans-serif;
+    z-index: 9999;
+  }
+
+  #loading-text {
+    margin-bottom: 15px;
+    font-size: 1.3rem;
+  }
+
+  #loading-bar-container {
+    width: 300px;
+    height: 20px;
+    background-color: #ffd1dc;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 0 5px #d63384aa;
+  }
+
+  #loading-bar {
+    height: 100%;
+    width: 0;
+    background-color: #d63384;
+    border-radius: 10px;
+    animation: loadingAnim 3s linear forwards;
+  }
+
+  @keyframes loadingAnim {
+    from { width: 0; }
+    to { width: 100%; }
+  }
+
+@media (max-width: 700px) {
+  body {
+    height: auto;
+    padding: 0.5rem;
+    overflow: auto;
+  }
+
+  #container {
+    flex-direction: column;
+    gap: 1rem;
+    height: auto;
+  }
+
+  #controls {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    max-width: 100%;
+    overflow-x: auto;
+    gap: 0.5rem;
+    padding: 0.5rem;
+  }
+
+  #char-select, #level-select {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  #maze-container {
+    position: relative;
+    width: 100%;
+    max-height: 60vh;
+    overflow: auto;
+    margin: 0 auto;
+    border-radius: 8px;
+  }
+
+  #maze {
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+    max-width: 100%;
+  }
+
+  .cell {
+    width: 24px;
+    height: 24px;
+    line-height: 24px;
+    font-size: 1.2rem;
+  }
+}
+@media (max-width: 700px) {
+  button {
+    font-size: 0.95rem;
+    padding: 0.5rem 0.8rem;
+    flex: 1 1 auto;
+    min-width: 80px;
+  }
+
+  #char-select div,
+  #level-select button,
+  #controls button {
+    flex: 1 1 auto;
+    min-width: 80px;
+    font-size: 1rem;
+  }
+
+  #controls {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  #char-select, #level-select {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+}
+
+#mobile-controls {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+#mobile-controls div {
+  display: flex;
+  gap: 0.5rem;
+}
+
+#mobile-controls button.arrow {
+  width: 40px;
+  height: 40px;
+  background: transparent;
+  border: 2px solid #d63384;
+  border-radius: 6px;
+  cursor: pointer;
+  position: relative;
+  transition: background-color 0.2s ease;
+}
+
+#mobile-controls button.arrow:hover {
+  background-color: #d63384;
+}
+
+/* Up arrow */
+#mobile-controls button.arrow.up::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 30%;
+  transform: translateX(-50%);
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-bottom: 14px solid #d63384;
+}
+
+/* Down arrow */
+#mobile-controls button.arrow.down::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 40%;
+  transform: translateX(-50%);
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-top: 14px solid #d63384;
+}
+
+/* Left arrow */
+#mobile-controls button.arrow.left::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 30%;
+  transform: translateY(-50%);
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid transparent;
+  border-right: 14px solid #d63384;
+}
+
+/* Right arrow */
+#mobile-controls button.arrow.right::before {
+  content: '';
+  position: absolute;
+  top: 20%;
+  left: 40%;
+  transform: translateY(-50%);
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid transparent;
+  border-left: 14px solid #d63384;
+}
+
+@media (max-width: 700px) {
+  #mobile-controls {
+    display: flex;
+  }
+}
+
+  }
+}
+
+    </style>
+  </head>
+  <body>
+<div id="loading-screen">
+  <h2 style="font-size: 200%;">Love Maze</h2>
+  <div id="loading-text">Warming up hearts and pathways....</div>
+  <div id="loading-bar-container">
+    <div id="loading-bar"></div>
+  </div>
+</div>
+
+  <div id="container">
+
+  <div id="controls">
+    <div>
+      <h2>Choose Character</h2>
+      <div id="char-select">
+        <div class="selected" data-char="❤️">❤️</div>
+        <div data-char="💖">💖</div>
+        <div data-char="💜">💜</div>
+        <div data-char="💙">💙</div>
+      </div>
+    </div>
+
+    <div>
+      <h2>Select Difficulty</h2>
+      <div id="level-select">
+        <button class="active" data-size="9">Easy</button>
+        <button data-size="15">Medium</button>
+        <button data-size="21">Hard</button>
+  
+      </div>
+    </div>
+
+    <button id="reset-btn" title="Generate a new randomized maze">Reset Maze</button>
+    <button id="back-btn">Back</button>
+  </div>
+
+  <div id="right-side">
+    <header>
+      <h1 style="text-align: center; padding-left: 400px;">Mini Love Maze</h1>
+    </header>
+
+    <div id="maze-container">
+      <div id="maze"></div>
+      <div id="message"></div>
+    </div>
+  </div>
+  
+</div>
+
+<div id="mobile-controls">
+  <button class="arrow up" onclick="movePlayer(-1, 0)"></button>
+  <div>
+    <button class="arrow left" onclick="movePlayer(0, -1)"></button>
+    <button class="arrow right" onclick="movePlayer(0, 1)"></button>
+  </div>
+  <button class="arrow down" onclick="movePlayer(1, 0)"></button>
+</div>
+
+
+
+  <script>
+    const charDivs = document.querySelectorAll('#char-select div');
+    const levelButtons = document.querySelectorAll('#level-select button');
+    const mazeEl = document.getElementById('maze');
+    const messageEl = document.getElementById('message');
+    const resetBtn = document.getElementById('reset-btn');
+
+    let currentChar = '❤️';
+    let mazeSize = 9;
+    let playerPos = [1, 1];
+    let goalPos;
+    let maze = [];
+
+    charDivs.forEach(div => {
+      div.onclick = () => {
+        charDivs.forEach(d => d.classList.remove('selected'));
+        div.classList.add('selected');
+        currentChar = div.dataset.char;
+        renderMaze();
+      };
+    });
+
+    levelButtons.forEach(btn => {
+      btn.onclick = () => {
+        levelButtons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        mazeSize = parseInt(btn.dataset.size);
+        initMaze();
+      };
+    });
+
+    resetBtn.onclick = () => {
+      initMaze();
+    };
+
+    function initMaze() {
+      maze = generateMaze(mazeSize, mazeSize);
+      playerPos = [1, 1];
+      goalPos = [mazeSize - 2, mazeSize - 2];
+      messageEl.textContent = '';
+      renderMaze();
+    }
+
+    function renderMaze() {
+      mazeEl.innerHTML = '';
+      mazeEl.style.gridTemplateColumns = `repeat(${mazeSize}, 25px)`;
+      for (let r = 0; r < mazeSize; r++) {
+        for (let c = 0; c < mazeSize; c++) {
+          const cell = document.createElement('div');
+          cell.classList.add('cell');
+          if (maze[r][c] === 1) cell.classList.add('wall');
+          else cell.classList.add('path');
+          if (r === playerPos[0] && c === playerPos[1]) {
+            cell.textContent = currentChar;
+            cell.classList.add('player');
+          }
+          if (r === goalPos[0] && c === goalPos[1]) {
+            cell.textContent = '🏁';
+            cell.classList.add('goal');
+          }
+          mazeEl.appendChild(cell);
+        }
+      }
+    }
+
+    function generateMaze(rows, cols) {
+      let maze = Array.from({length: rows}, () => Array(cols).fill(1));
+
+      function carve(x, y) {
+        const directions = [
+          [0, 2], [0, -2], [2, 0], [-2, 0]
+        ].sort(() => Math.random() - 0.5);
+
+        directions.forEach(([dx, dy]) => {
+          let nx = x + dx, ny = y + dy;
+          if (nx > 0 && ny > 0 && nx < rows - 1 && ny < cols - 1 && maze[nx][ny] === 1) {
+            maze[nx][ny] = 0;
+            maze[x + dx / 2][y + dy / 2] = 0;
+            carve(nx, ny);
+          }
+        });
+      }
+
+      maze[1][1] = 0;
+      carve(1, 1);
+      maze[rows - 2][cols - 2] = 0; // goal
+      return maze;
+    }
+
+   const celebrationImages = [
+  "images/received_371596248764180.jpeg",
+  "images/received_891776312128969.jpeg",
+  "images/received_903712041321924.jpeg",
+  "images/received_913905686618609.jpeg",
+  "images/received_2088324958172537.jpeg",
+  "images/received_273054032429552.jpeg"
+];
+
+
+function movePlayer(dx, dy) {
+  const [r, c] = playerPos;
+  const nr = r + dx, nc = c + dy;
+  if (maze[nr]?.[nc] === 0) {
+    playerPos = [nr, nc];
+    renderMaze();
+    if (nr === goalPos[0] && nc === goalPos[1]) {
+      const randomImage = celebrationImages[Math.floor(Math.random() * celebrationImages.length)];
+      messageEl.innerHTML = `
+        <p> heheh You made it to the finish line!</p>
+        <img src="${randomImage}" alt="Congrats!" style="max-width:200px; display:block; margin:1rem auto;" />
+      `;
+    } else {
+      messageEl.textContent = '';
+    }
+  }
+}
+
+
+    document.addEventListener('keydown', e => {
+      switch (e.key) {
+        case 'ArrowUp': e.preventDefault(); movePlayer(-1, 0); break;
+        case 'ArrowDown': e.preventDefault(); movePlayer(1, 0); break;
+        case 'ArrowLeft': e.preventDefault(); movePlayer(0, -1); break;
+        case 'ArrowRight': e.preventDefault(); movePlayer(0, 1); break;
+      }
+    });
+
+    document.getElementById('back-btn').addEventListener('click', () => {
+  window.history.back();
+});
+
+    document.addEventListener('keydown', function (e) {
+  switch (e.key) {
+    case 'ArrowUp':
+    case 'w':
+    case 'W':
+      movePlayer(-1, 0);
+      break;
+    case 'ArrowDown':
+    case 's':
+    case 'S':
+      movePlayer(1, 0);
+      break;
+    case 'ArrowLeft':
+    case 'a':
+    case 'A':
+      movePlayer(0, -1);
+      break;
+    case 'ArrowRight':
+    case 'd':
+    case 'D':
+      movePlayer(0, 1);
+      break;
+  }
+});
+
+   function initMaze() {
+    maze = generateMaze(mazeSize, mazeSize);
+    playerPos = [1, 1];
+    goalPos = [mazeSize - 2, mazeSize - 2];
+    messageEl.textContent = '';
+    renderMaze();
+  }
+
+  window.addEventListener('load', () => {
+    // Wait for loading bar animation to finish (3 seconds)
+    setTimeout(() => {
+      // Hide loading screen
+      document.getElementById('loading-screen').style.display = 'none';
+      // Show maze container
+      document.getElementById('container').style.display = 'flex'; // or 'block' based on your CSS layout
+
+      // Initialize the maze when showing the game
+      initMaze();
+    }, 3000);
+  });
+
+    // Initialize maze on page load
+    initMaze();
+  </script>
+
+  </body>
+  </html>

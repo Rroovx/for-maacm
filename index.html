@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Love Lane</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+  </style>
+</head>
+<body>
+<header>
+  <div class="header-wrapper">
+    <div class="logo">Love Lane</div>
+    <button class="menu-toggle" id="menu-toggle">☰</button>
+
+    <!-- Navigation Dropdown -->
+    <nav id="dropdown-menu" class="dropdown-menu">
+      <button id="theme-toggle" class="btndropdown">🌙 Toggle Theme</button>
+      <button class="btndropdown" onclick="toggleArchive()">📦 Archive</button>
+    </nav>
+  </div>
+</header>
+
+
+<div class="welcome-card">
+  <div class="container">
+    <div class="welcome">
+      <h1>Welcome to Love Lane</h1>
+   <div id="live-counter" class="live-counter">Loading...</div>
+    </div>
+
+   <!-- Preview Buttons (Navigation only) -->
+<div class="section-preview">
+  <a href="#notes" class="preview-box">💌 Notes</a>
+  <a href="#gallery" class="preview-box">🖼️ Gallery</a>
+  <a href="#game" class="preview-box">🎮 Mini Game</a>
+  <a href="#wishlist" class="preview-box">📝 Wishlist</a>   
+</div>
+
+
+<section  class="birtday-container">
+  <h2>🎉 Birthday Countdown</h2>
+   <h2>July 26, 2025</h2>
+  <h1 id="bday-timer">Loading...</h1>
+  <p>special day 💖</p>
+  <button id="birthday-button" class="btn" disabled>🎁 Unlock Surprise</button>
+<audio id="click-sound" preload="auto">
+  <source src="https://www.soundjay.com/buttons/sounds/button-29.mp3" type="audio/mpeg">
+</audio>
+
+</section>
+
+    </div>
+  </div>
+</div>
+
+
+
+    <!-- NOTES SECTION -->
+ <section id="notes" class="section-content">
+  <h2>Notes / Messages</h2>
+  <button class="btn" onclick="openNoteModal()">Write a new note</button>
+
+  <div id="note-modal" class="modal hidden">
+    <div class="modal-content">
+      <textarea id="note-text" placeholder="Type your message here..."></textarea>
+      <button class="btn" onclick="saveNote()">Save Note</button>
+      <button class="btn" onclick="closeNoteModal()">Cancel</button>
+    </div>
+  </div>
+
+</section>
+
+
+    </section>
+
+    <!-- GALLERY SECTION -->
+<section id="gallery" class="section-content">
+  <h2 class="gallery-header">Gallery</h2>
+
+  <div class="gallery-section">
+    <div class="gallery-wrapper collapsed" id="gallery-wrapper">
+      <div class="gallery">
+       <div class="photo"><img src="images/1.jpeg" alt=""></div>
+<div class="photo"><img src="images/2.webp" alt=""></div>
+<div class="photo"><img src="images/3.jpg" alt=""></div>
+<div class="photo"><img src="images/IMG_20240722_223642_480.jpg" alt=""></div>
+<div class="photo"><img src="images/IMG_20240822_175851_772.jpg" alt=""></div>
+<div class="photo"><img src="images/IMG_20240822_175934_403.jpg" alt=""></div>
+
+<!-- Extra photos -->
+<div class="photo extra"><img src="images/IMG_20240921_185615_311.webp" alt=""></div>
+<div class="photo extra"><img src="images/IMG_20240927_184607_814.jpg" alt=""></div>
+<div class="photo extra"><img src="images/IMG_20241030_144844_493.jpg" alt=""></div>
+<div class="photo extra"><img src="images/IMG_20241108_203243_134.jpg" alt=""></div>
+<div class="photo extra"><img src="images/IMG_20250117_191904_475.jpg" alt=""></div>
+<div class="photo extra"><img src="images/IMG_20250304_205052_400.jpg" alt=""></div>
+<div class="photo extra"><img src="images/IMG_20250313_134419_121.jpg" alt=""></div>
+<div class="photo extra"><img src="images/IMG_20250322_183400_092.jpg" alt=""></div>
+<div class="photo extra"><img src="images/IMG_20250322_183437_639.jpg" alt=""></div>
+<div class="photo extra"><img src="images/IMG_20250322_184257_103.jpg" alt=""></div>
+<div class="photo extra"><img src="images/Messenger_creation_2A788DF0-4FD6-422E-9084-11CD5178B97D.jpeg" alt=""></div>
+<div class="photo extra"><img src="images/Messenger_creation_6e0a5229-b00b-4c50-b136-dcb25ca1d09d.jpeg" alt=""></div>
+<div class="photo extra"><img src="images/Messenger_creation_AC9384BC-66B1-44F2-9D1D-D0E62E93AEF1.jpeg" alt=""></div>
+<div class="photo extra"><img src="images/Messenger_creation_d49b06aa-154e-416c-8ede-b5dc9d9d306e.jpeg" alt=""></div>
+<div class="photo extra"><img src="images/OldRoll_1714361514244.jpg" alt=""></div>
+<div class="photo extra"><img src="images/received_158201154038931.jpeg" alt=""></div>
+<div class="photo extra"><img src="images/received_273054032429552.jpeg" alt=""></div>
+<div class="photo extra"><img src="images/received_294417110161609.jpeg" alt=""></div>
+<div class="photo extra"><img src="images/received_371596248764180.jpeg" alt=""></div>
+<div class="photo extra"><img src="images/received_538238968518978.jpeg" alt=""></div>
+<div class="photo extra"><img src="images/received_877033564090772.jpeg" alt=""></div>
+<div class="photo extra"><img src="images/received_891776312128969.jpeg" alt=""></div>
+<div class="photo extra"><img src="images/received_898903041595597.jpeg" alt=""></div>
+<div class="photo extra"><img src="images/received_903712041321924.jpeg" alt=""></div>
+<div class="photo extra"><img src="images/received_913905686618609.jpeg" alt=""></div>
+<div class="photo extra"><img src="images/received_1095052821747146.jpeg" alt=""></div>
+<div class="photo extra"><img src="images/received_1105736227275968.jpeg" alt=""></div>
+<div class="photo extra"><img src="images/received_1334384757442748.jpeg" alt=""></div>
+<div class="photo extra"><img src="images/received_2022312698129859.jpeg" alt=""></div>
+<div class="photo extra"><img src="images/received_2026423954424878.jpeg" alt=""></div>
+<div class="photo extra"><img src="images/received_2088324958172537.jpeg" alt=""></div>
+<div class="photo extra"><img src="images/received_2357548084634716.jpeg" alt=""></div>
+
+      </div>
+    </div>
+  </div>
+
+    <button class="btn gallery-toggle-btn" id="view-more-btn" onclick="expandGallery()">
+      View More Photos
+    </button>
+
+  </div>
+</section>
+
+
+    <!-- GAME SECTION -->
+  <section id="game" class="section-content">
+  <h2>Mini Game</h2>
+  <p>Let’s play a fun little game together!</p>
+
+  <div class="game-box-container">
+    <div class="game-box">
+      <h3>Mood Picker</h3>
+      <p>Feelings Hub</p>
+      <button class="btn" onclick="location.href='game1.html'">Play</button>
+    </div>
+    <div class="game-box">
+      <h3>💘 Love Maze </h3>
+      <p>Love trap</p>
+      <button class="btn" onclick="location.href='game2.html'">Play</button>
+    </div>
+    <div class="game-box">
+      <h3>Moments in Pieces</h3>
+      <p>Gentle Pieces</p>
+      <button class="btn" onclick="location.href='game3.html'">Play</button>
+    </div>
+  </div>
+</section>
+
+
+<!-- WISHLIST SECTION -->
+<section id="wishlist" class="wishlist-container">
+  <h2>🌸 Wishlist / Bucket List</h2>
+
+  <!-- Add New Wish -->
+  <div class="wishlist-input">
+    <input type="text" id="newWishInput" placeholder="Add a new wish..." />
+  </div>
+
+  <!-- Wishlist Items -->
+  <ul id="wishlistItems" class="bucket-list">
+  </ul>
+
+  <!-- Buttons -->
+  <div class="wishlist-buttons">
+    <button class="btn" onclick="addWish()">Add</button>
+    <button class="btn" onclick="archiveChecked()">Archive</button>
+  </div>
+</section>
+
+
+
+   <section id="countdown" class="section-content">
+  <h2>⏳ Relationship Countdown</h2>
+  <h3 id="days-together">Loading...</h3>
+  <p id="monthsary-countdown">Loading monthsary...</p>
+  <p id="anniversary-countdown">Loading anniversary...</p>
+</section>
+
+
+<div id="archive-panel" class="floating-archive" style="display: none;">
+  <div class="floating-archive-content">
+    <button onclick="clearArchive()" class="clear-archive">🗑️ Clear Archive</button>
+    <button class="close-archive" onclick="toggleArchive()">✖</button>
+    <h2>📦 Archived Wishes</h2>
+    <ul id="archivedItems"></ul>
+  </div>
+</div>
+
+
+
+  <script src="special.js"></script>
+</body>
+</html>
