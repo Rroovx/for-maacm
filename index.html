@@ -6,6 +6,48 @@
   <title>Love Lane</title>
   <link rel="stylesheet" href="style.css" />
   <style>
+    .btn:disabled,
+.btn.disabled {
+  background-color: #ccc;
+  color: #666;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.music-room {
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  max-width: 400px;
+  margin: 20px auto;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.playlist {
+  list-style: none;
+  padding: 0;
+}
+
+.playlist-item {
+  display: block;
+  padding: 10px;
+  color: #333;
+  text-decoration: none;
+  border-bottom: 1px solid #ddd;
+  transition: background-color 0.3s;
+}
+
+.playlist-item:hover {
+  background-color: #e0e0e0;
+}
+.preview-box.disabled {
+  pointer-events: none;   
+  color: gray;           
+  filter: blur(2px);    
+  cursor: default;        
+  user-select: none;     
+
+
   </style>
 </head>
 <body>
@@ -30,12 +72,15 @@
    <div id="live-counter" class="live-counter">Loading...</div>
     </div>
 
-   <!-- Preview Buttons (Navigation only) -->
+  
 <div class="section-preview">
   <a href="#notes" class="preview-box">💌 Notes</a>
   <a href="#gallery" class="preview-box">🖼️ Gallery</a>
   <a href="#game" class="preview-box">🎮 Mini Game</a>
-  <a href="#wishlist" class="preview-box">📝 Wishlist</a>   
+  <a href="#wishlist" class="preview-box">📝 Wishlist</a>  
+  <a href="#music-room" class="preview-box disabled">Coming soon</a>
+
+   
 </div>
 
 
@@ -55,13 +100,10 @@
   </div>
 </div>
 
-
-
-   <!-- NOTES SECTION -->
+    <!-- NOTES SECTION -->
  <section id="notes" class="section-content">
   <h2>Notes / Messages</h2>
-  <div class="note">Hi Maacm, Hindi mo ito ma dedelete bleh🤪</div>
-  <div class="note">Tae Well</div>
+  <div class="note">Hi Maacm, Hindi mo ito ma dedele bleh🤪</div>
   <button class="btn" onclick="openNoteModal()">Write a new note</button>
 
 
@@ -159,8 +201,20 @@
       <p>Gentle Pieces</p>
       <button class="btn" onclick="location.href='game3.html'">Play</button>
     </div>
-  </div>
+   <div class="game-box">
+  <h3>Game 4</h3>
+  <p>Coming Soon</p>
+  <button class="btn disabled" disabled>Play</button>
+</div>
+<div class="game-box">
+  <h3>Game 5</h3>
+  <p>Coming Soon</p>
+  <button class="btn disabled" disabled>Play</button>
+</div>
+
 </section>
+
+
 
 
 <!-- WISHLIST SECTION -->
