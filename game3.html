@@ -16,7 +16,7 @@
     position: fixed;
     top: 20px;
     left: 20px;
-    background: transparent;
+    background: #ff8888;
     border: none;
     cursor: pointer;
     color: #444;
@@ -31,9 +31,12 @@
     transition: background-color 0.3s ease, color 0.3s ease;
     z-index: 1000;
     text-decoration: none;
+
   }
-  #backBtn:hover {s
-    color: #hotpink
+  #backBtn:hover {
+    background-color: #fbc2eb;
+    color: whites;
+
   }
   #backBtn svg {
     width: 18px;
@@ -61,38 +64,84 @@
   padding: 0 10px;
 }
 
+  
   select#difficulty {
     padding: 6px 10px;
     font-size: 1rem;
     border-radius: 5px;
-    border: 2px solid #ff8888;
+    border: 5px solid #ff8888;
     outline: none;
   }
-  .image-choices {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    flex-wrap: wrap;
-    margin-top: 60px;
-    margin-bottom: 20px;
-    padding: 0 10px;
-  }
-  .image-choices img {
-    width: 80px;
-    height: 80px;
-    object-fit: cover;
-    border: 2px solid transparent;
-    cursor: pointer;
-    transition: transform 0.2s, border-color 0.2s;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-  }
-  .image-choices img:hover {
-    transform: scale(1.1);
-  }
-  .image-choices img.selected {
-    border-color: #ff8888;
-  }
+ 
+
+.image-choices-wrapper {
+  position: relative;
+  max-width: calc(80px * 6 + 10px * 5); /* show only 6 images */
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+}
+
+.image-choices {
+  display: flex;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  gap: 10px;
+  padding: 10px 0;
+  -webkit-overflow-scrolling: none;
+
+}
+.image-choices::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Edge */
+}
+
+.image-choices img {
+  flex: 0 0 auto;
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border: 2px solid transparent;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: transform 0.2s, border-color 0.2s;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.image-choices img:hover {
+  transform: scale(1.1);
+}
+
+.image-choices img.selected {
+  border-color: #ff8888;
+}
+
+.scroll-arrow {
+  background: #ff8888;
+  border: none;
+  font-size: 24px;
+  padding: 8px 12px;
+  cursor: pointer;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  z-index: 1;
+  user-select: none;
+  transition: background-color 0.2s;
+}
+
+.scroll-arrow:hover {
+  background-color: grey;
+}
+
+.scroll-arrow.left {
+  margin-right: 5px;
+}
+
+.scroll-arrow.right {
+  margin-left: 5px;
+}
+
+
+
   #puzzle {
     margin: 0 auto;
     display: grid;
@@ -238,6 +287,7 @@
   font-size: 20px;
   color: #f08080;
   font-weight: bold;
+  padding-bottom: 20px;
 }
 @keyframes fadeInBounce {
   0% {
@@ -258,7 +308,7 @@
   font-family: 'Arial', sans-serif;
   font-size: 36px;
   color: #f08080;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
   text-align: center;
   user-select: none;
   animation: fadeInBounce 1.5s ease forwards;
@@ -282,6 +332,51 @@
   user-select: none;animation: wave 2s ease-in-out infinite;
 }
 
+@media (max-width: 768px) {
+  #puzzle {
+    width: 320px !important;
+    height: 320px !important;
+  }
+  .image-choices img {
+    width: 70px;
+    height: 70px;
+  }
+  button {
+    font-size: 15px;
+    padding: 9px 18px;
+  }
+}
+
+@media (max-width: 600px) {
+  .controls-top {
+    flex-direction: column;
+  }
+  .scroll-arrow {
+    font-size: 20px;
+    padding: 6px 10px;
+    margin: 0 20px;
+  }
+}
+
+@media (max-width: 400px) {
+  .tile {
+    font-size: 0.9rem;
+  }
+  .image-choices img {
+    width: 60px;
+    height: 60px;
+  }
+  button {
+    font-size: 13px;
+    padding: 7px 14px;
+  }
+  #puzzle {
+    width: 260px !important;
+    height: 260px !important;
+  }
+}
+
+
 
 </style>
 </head>
@@ -303,15 +398,30 @@
   Back
 </a>
 
+<h1 id="heading">❤️Moments in Pieces❤️</h1>
 
- <h1 id="heading">❤️Moments in Pieces❤️</h1>
-<div class="image-choices" title="Select a puzzle image">
-  <img src="images/IMG_20241108_203243_134.jpg" alt="Pic 1" />
-  <img src="images/IMG_20240921_185615_311.webp" alt="Pic 2" />
-  <img src="images/IMG_20250313_134419_121.jpg" alt="Pic 3" />
-  <img src="images/IMG_20250322_183400_092.jpg" alt="Pic 4" />
-  <img src="images/received_1095052821747146.jpeg" alt="Pic 5" />
+<div class="image-choices-wrapper">
+  <button class="scroll-arrow left">&#10094;</button>
+
+  <div class="image-choices" title="Select a puzzle image">
+    <img src="images/IMG_20241108_203243_134.jpg" alt="Pic 1" />
+    <img src="images/IMG_20240921_185615_311.webp" alt="Pic 2" />
+    <img src="images/IMG_20250313_134419_121.jpg" alt="Pic 3" />
+    <img src="images/IMG_20250322_183400_092.jpg" alt="Pic 4" />
+    <img src="images/received_1095052821747146.jpeg" alt="Pic 5" />
+
+    <img src="images/received_158201154038931.jpeg" alt="Pic 6" />
+    <img src="images/received_273054032429552.jpeg" alt="Pic 7" />
+    <img src="images/Messenger_creation_2A788DF0-4FD6-422E-9084-11CD5178B97D.jpeg" alt="Pic 8" />
+    <img src="images/received_294417110161609.jpeg" alt="Pic 9" />
+    <img src="images/received_538238968518978.jpeg" alt="Pic 10" />
+
+  </div>
+
+  <button class="scroll-arrow right">&#10095;</button>
 </div>
+
+
 
 <div id="puzzle"></div>
 
@@ -353,6 +463,9 @@
   const confettiCtx = confettiCanvas.getContext('2d');
   const loadingScreen = document.getElementById('loading-screen');
   const loadingBar = document.getElementById('loading-bar');
+  const scrollContainer = document.querySelector('.image-choices');
+  const leftArrow = document.querySelector('.scroll-arrow.left');
+  const rightArrow = document.querySelector('.scroll-arrow.right');
 
 
   // State
@@ -452,6 +565,8 @@
 
   // Solve instantly
   function solve() {
+
+
     init();
     setPuzzleGridSize();
     draw();
@@ -528,6 +643,16 @@
   winSound.currentTime = 0;
   winSound.play().catch(e => console.error("Failed to play win sound:", e));
 }
+
+  const scrollByAmount = 80 * 3 + 10 * 2; // 3 images + 2 gaps
+
+  leftArrow.addEventListener('click', () => {
+    scrollContainer.scrollBy({ left: -scrollByAmount, behavior: 'smooth' });
+  });
+
+  rightArrow.addEventListener('click', () => {
+    scrollContainer.scrollBy({ left: scrollByAmount, behavior: 'smooth' });
+  });
 
 
   // Endgame
@@ -663,6 +788,7 @@ document.addEventListener('DOMContentLoaded', () => {
     init();
     setPuzzleGridSize();
     draw();
+    shuffle();
     resetTimer();
     message.textContent = '';
   });
@@ -673,6 +799,7 @@ document.addEventListener('DOMContentLoaded', () => {
       img.classList.add('selected');
       currentImage = img.src;
       draw();
+      shuffle();
     });
   });
 
@@ -681,7 +808,6 @@ document.addEventListener('DOMContentLoaded', () => {
     resizeConfettiCanvas();
     draw();
   });
-
 
   // Initial setup
   init();
