@@ -622,9 +622,15 @@ const moods = [
       "Why don’t scientists trust atoms? Because they make up everything!",
       "Happiness is not something ready made. It comes from your own actions.",
       "Smile — it’s free therapy.",
-      "Do more of what makes you happy!"
+      "Do more of what makes you happy!",
+      "Choose happiness — it’s a habit worth forming.",
+      "Happiness is contagious — spread it everywhere.",
+      "Start each day with a grateful heart.",
+      "You glow differently when you're happy.",
+      "Joy is the simplest form of gratitude.",
+      "There is sunshine in your soul today!"
     ],
-    soundSrc: 'music/toe.mp3' // Replace with your actual audio file or valid URL
+    soundSrc: 'music/toe.mp3'
   },
   { 
     name: 'sad',
@@ -633,7 +639,13 @@ const moods = [
       "Every cloud has a silver lining. Keep going!",
       "Sadness flies away on the wings of time.",
       "Tears are words the heart can’t express.",
-      "Sometimes it’s okay to not be okay."
+      "Sometimes it’s okay to not be okay.",
+      "The pain you feel today is the strength you’ll feel tomorrow.",
+      "This too shall pass.",
+      "Crying doesn’t mean you’re weak. It means you’ve been strong too long.",
+      "Healing takes time. Be patient with yourself.",
+      "Storms make trees take deeper roots.",
+      "You're allowed to feel. You're allowed to heal."
     ],
     soundSrc: 'music/Coldplay - Fix You (Official Video).mp3'
   },
@@ -644,9 +656,15 @@ const moods = [
       "Take a deep breath — anger fades, clarity remains.",
       "Anger is one letter short of danger.",
       "Don’t let anger control you — you control your anger.",
-      "Speak when you are angry — and you will make the best speech you’ll ever regret."
+      "Speak when you are angry — and you will make the best speech you’ll ever regret.",
+      "Let your anger go before it turns into regret.",
+      "Anger is temporary, consequences are not.",
+      "Walk away from anything that gives you bad vibes.",
+      "Pause. Breathe. Proceed with calm.",
+      "You are not your anger.",
+      "Mastering calmness is mastering life."
     ],
-     soundSrc: 'music/Billie Eilish - bad guy (Official Music Video).mp3'
+    soundSrc: 'music/Billie Eilish - bad guy (Official Music Video).mp3'
   },
   { 
     name: 'sleepy',
@@ -655,9 +673,15 @@ const moods = [
       "Early to bed and early to rise makes a person healthy, wealthy, and wise.",
       "Sleep is the best meditation.",
       "Rest when you're weary. Refresh and renew yourself.",
-      "A good laugh and a long sleep are the best cures in the doctor’s book."
+      "A good laugh and a long sleep are the best cures in the doctor’s book.",
+      "Let your dreams carry you to peace tonight.",
+      "A nap a day keeps the crankiness away.",
+      "Don't fight sleep — embrace it.",
+      "Even machines need to shut down — so do you.",
+      "Your body speaks through yawns. Listen to it.",
+      "The bed is calling, and I must go."
     ],
-    soundSrc:'music/Owl City - Fireflies (Official Music Video).mp3'
+    soundSrc: 'music/Owl City - Fireflies (Official Music Video).mp3'
   },
   { 
     name: 'thoughtful',
@@ -666,9 +690,15 @@ const moods = [
       "The unexamined life is not worth living.",
       "Sometimes you win, sometimes you learn.",
       "Reflect more. React less.",
-      "Big journeys begin with small steps."
+      "Big journeys begin with small steps.",
+      "Deep thoughts lead to deeper growth.",
+      "Wisdom begins in wonder.",
+      "Think before you speak. Read before you think.",
+      "Clarity comes from quiet contemplation.",
+      "A thoughtful heart sees more than eyes can.",
+      "Mindful thinking opens mindful living."
     ],
-    soundSrc:'music/Ariana Grande - ghostin (Audio).mp3'
+    soundSrc: 'music/Ariana Grande - ghostin (Audio).mp3'
   },
   { 
     name: 'peaceful',
@@ -677,7 +707,13 @@ const moods = [
       "Peace begins with a smile.",
       "Breathe in peace. Breathe out stress.",
       "Stillness speaks louder than noise.",
-      "Let it be — and let peace in."
+      "Let it be — and let peace in.",
+      "Where peace resides, joy follows.",
+      "Inner peace starts the moment you choose not to allow another person to control your emotions.",
+      "Make peace your priority.",
+      "Serenity is not freedom from the storm, but peace within the storm.",
+      "A calm mind brings inner strength and self-confidence.",
+      "Harmony is the true nature of the soul."
     ],
     soundSrc: 'music/SM.mp3'
   },
@@ -688,7 +724,13 @@ const moods = [
       "Excitement is the spark that ignites dreams.",
       "Something awesome is coming your way!",
       "Stay excited — magic happens when you do.",
-      "Live boldly, love deeply, laugh loudly."
+      "Live boldly, love deeply, laugh loudly.",
+      "Anticipation is the heart’s way of smiling at the future.",
+      "Your energy introduces you before you even speak.",
+      "Let your enthusiasm light the way.",
+      "Catch flights, not doubts!",
+      "Today is full of opportunities — go get 'em!",
+      "Let your dreams be bigger than your fears."
     ],
     soundSrc: 'music/excited.mp3'
   },
@@ -699,11 +741,18 @@ const moods = [
       "Calm is a superpower.",
       "Inhale calm. Exhale chaos.",
       "Peace is not absence of conflict, but ability to handle it.",
-      "Still waters run deep."
+      "Still waters run deep.",
+      "Silence is sometimes the best answer.",
+      "Keep calm and carry on.",
+      "The quieter you become, the more you can hear.",
+      "Let go of what you can’t control.",
+      "A calm heart is a strong heart.",
+      "Flow like water — calmly, but with strength."
     ],
     soundSrc: 'music/toe.mp3'
   }
 ];
+
 
 
 
@@ -723,7 +772,7 @@ const nextBtn = document.getElementById('nextBtn');
 const backBtn = document.getElementById('backBtn');
 const startBtn = document.getElementById('startBtn');
 const muteBtn = document.getElementById('muteBtn');
-muteBtn.textContent = '🔇 Muted'; // Default button text
+muteBtn.textContent = '🔇 Muted'; 
 
 
 function updateMood() {
